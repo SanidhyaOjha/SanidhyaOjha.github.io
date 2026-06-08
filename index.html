@@ -1522,6 +1522,127 @@
   /* tweak: hide hero notes */
   body.no-notes .callouts { display: none; }
 
+  /* ============== bookshelf (READS) ============== */
+  .bookshelf {
+    margin: 6px 0 0;
+    display: grid; gap: 0;
+    background:
+      linear-gradient(90deg, #e1d2ad 0, #e1d2ad 14px, transparent 14px) left top / 100% 100% no-repeat,
+      linear-gradient(-90deg, #e1d2ad 0, #e1d2ad 14px, transparent 14px) right top / 100% 100% no-repeat,
+      linear-gradient(180deg, #e1d2ad 0%, #d8c8a0 50%, #c4b285 100%);
+    padding: 0 14px;
+    box-shadow:
+      inset 0 0 0 1px rgba(0,0,0,0.16),
+      0 10px 24px rgba(0,0,0,0.32),
+      0 30px 60px -16px rgba(0,0,0,0.4);
+  }
+  .bs-row {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 1px;
+    padding: 22px 4px 0;
+    min-height: 240px;
+    background: linear-gradient(180deg, #16110b 0%, #221912 60%, #1a130c 100%);
+    box-shadow:
+      inset 0 6px 12px rgba(0,0,0,0.55),
+      inset 0 -2px 0 rgba(0,0,0,0.5);
+  }
+  .bs-board {
+    height: 16px;
+    background: linear-gradient(180deg, #ecdcb3 0%, #d6c191 55%, #a8946a 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.42),
+      inset 0 -1px 0 rgba(0,0,0,0.32),
+      0 3px 6px rgba(0,0,0,0.45);
+    position: relative; z-index: 2;
+  }
+  .bs-board::before, .bs-board::after {
+    content: '';
+    position: absolute; top: 4px; bottom: 4px;
+    width: 14px;
+    background: linear-gradient(180deg, #d8c08a, #b89a64);
+    border: 1px solid rgba(0,0,0,0.22);
+  }
+  .bs-board::before { left: -14px; }
+  .bs-board::after  { right: -14px; }
+  .bs-board--floor { height: 22px; }
+  .bk {
+    position: relative; flex: 0 0 auto;
+    width: var(--w, 36px); height: var(--h, 240px);
+    background: var(--c, #8a3a32);
+    color: var(--c-ink, #f4e8d8);
+    display: flex; flex-direction: column;
+    align-items: stretch; justify-content: space-between;
+    padding: 12px 0 10px;
+    cursor: default; overflow: hidden;
+    box-shadow:
+      inset 2px 0 0 rgba(255,255,255,0.07),
+      inset -2px 0 0 rgba(0,0,0,0.25),
+      inset 0 2px 0 rgba(255,255,255,0.1),
+      inset 0 -2px 0 rgba(0,0,0,0.32);
+    transition: transform 220ms cubic-bezier(.34,1.56,.64,1), filter 220ms;
+  }
+  .bk:hover {
+    transform: translateY(-10px);
+    filter: brightness(1.12);
+    z-index: 3;
+  }
+  .bk-band {
+    flex: 0 0 auto;
+    height: 14px;
+    margin: 4px 5px 0;
+    border-top: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    opacity: 0.45;
+  }
+  .bk-title {
+    flex: 1 1 auto;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font-family: var(--serif); font-style: italic;
+    font-size: 12.5px; line-height: 1.1;
+    text-align: center; color: inherit;
+    padding: 14px 0 8px;
+    white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+    align-self: center; width: 100%;
+  }
+  .bk-mark {
+    width: 14px; height: 1px;
+    background: currentColor; opacity: 0.55;
+    margin: 0 auto 6px;
+    flex: 0 0 auto;
+  }
+  .bk-author {
+    flex: 0 0 auto;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font-family: var(--mono); font-size: 7px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: inherit; opacity: 0.7;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-height: 80px;
+    align-self: center;
+  }
+  .bs-cap {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 16px;
+    font-family: var(--mono); font-size: 9px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .bs-cap em { font-family: var(--serif); font-style: italic; text-transform: none; letter-spacing: 0; color: var(--ink-mute); font-size: 11px; }
+  .bs-cap .lc-tick { width: 18px; height: 1px; background: var(--accent); flex: 0 0 auto; }
+
+  @media (max-width: 720px) {
+    .bookshelf { padding: 0 10px; }
+    .bs-row { min-height: 200px; padding: 18px 4px 0; }
+    .bk {
+      width: calc(var(--w, 36px) * 0.85);
+      height: calc(var(--h, 240px) * 0.78);
+    }
+    .bk-title { font-size: 11px; padding: 10px 0 6px; }
+  }
+
 </style>
 </head>
 <body>
@@ -2165,25 +2286,27 @@
     <section id="reading">
       <div class="section-head"><div class="id">§ 06 · Reads</div><h2>What’s on the desk</h2><div class="annot">fig. f · 12 on shelf</div></div>
       <div class="cmd-prompt">&gt;_ tail -n 12 bookshelf<span class="blink"></span></div>
-      <div class="read-list" id="readList">
-      <div class="read-row"><div class="read-title">A Good Girl’s Guide to Murder</div><div class="read-author">Holly Jackson</div><div class="read-meta">series · 01</div></div>
-      <div class="read-row"><div class="read-title">Good Girl, Bad Blood</div><div class="read-author">Holly Jackson</div><div class="read-meta">series · 02</div></div>
-      <div class="read-row"><div class="read-title">As Good as Dead</div><div class="read-author">Holly Jackson</div><div class="read-meta">series · 03</div></div>
-      <div class="read-row"><div class="read-title">The Kite Runner</div><div class="read-author">Khaled Hosseini</div><div class="read-meta">fiction</div></div>
-      <div class="read-row"><div class="read-title">The Hunger Games</div><div class="read-author">Suzanne Collins</div><div class="read-meta">fiction</div></div>
-      <div class="read-row read-row--more"><div class="read-title">Chainsaw Man</div><div class="read-author">Tatsuki Fujimoto</div><div class="read-meta">manga</div></div>
-      <div class="read-row read-row--more"><div class="read-title">White Nights</div><div class="read-author">F. Dostoevsky</div><div class="read-meta">fiction</div></div>
-      <div class="read-row read-row--more"><div class="read-title">The Silent Patient</div><div class="read-author">Alex Michaelides</div><div class="read-meta">thriller</div></div>
-      <div class="read-row read-row--more"><div class="read-title">The Psychology of Money</div><div class="read-author">Morgan Housel</div><div class="read-meta">non-fiction</div></div>
-      <div class="read-row read-row--more"><div class="read-title">Rich Dad Poor Dad</div><div class="read-author">Robert Kiyosaki</div><div class="read-meta">non-fiction</div></div>
-      <div class="read-row read-row--more"><div class="read-title">One Arranged Murder</div><div class="read-author">Chetan Bhagat</div><div class="read-meta">fiction</div></div>
-      <div class="read-row read-row--more"><div class="read-title">Five Point Someone</div><div class="read-author">Chetan Bhagat</div><div class="read-meta">fiction</div></div>
-      </div>
-      <button class="read-toggle" id="readToggle" type="button" data-more="7" aria-expanded="false">
-        <span class="rt-line"></span>
-        <span class="rt-text"><span class="rt-label">View 7 more</span><span class="rt-glyph">+</span></span>
-        <span class="rt-line"></span>
-      </button>
+      <figure class="bookshelf">
+        <div class="bs-row">
+          <div class="bk" style="--c:#8a3a32;--c-ink:#f4e8d8;--w:38px;--h:260px;"><div class="bk-band"></div><div class="bk-title">A Good Girl’s Guide to Murder</div><div class="bk-mark"></div><div class="bk-author">Holly Jackson</div></div>
+          <div class="bk" style="--c:#a64a3a;--c-ink:#f4e8d8;--w:34px;--h:252px;"><div class="bk-band"></div><div class="bk-title">Good Girl, Bad Blood</div><div class="bk-mark"></div><div class="bk-author">Holly Jackson</div></div>
+          <div class="bk" style="--c:#8a3a32;--c-ink:#f4e8d8;--w:36px;--h:256px;"><div class="bk-band"></div><div class="bk-title">As Good as Dead</div><div class="bk-mark"></div><div class="bk-author">Holly Jackson</div></div>
+          <div class="bk" style="--c:#234357;--c-ink:#dfe7ec;--w:40px;--h:268px;"><div class="bk-band"></div><div class="bk-title">The Silent Patient</div><div class="bk-mark"></div><div class="bk-author">Alex Michaelides</div></div>
+          <div class="bk" style="--c:#3d5a3b;--c-ink:#e2eccd;--w:32px;--h:272px;"><div class="bk-band"></div><div class="bk-title">The Kite Runner</div><div class="bk-mark"></div><div class="bk-author">Khaled Hosseini</div></div>
+          <div class="bk" style="--c:#2a3a4f;--c-ink:#d6dde6;--w:30px;--h:264px;"><div class="bk-band"></div><div class="bk-title">White Nights</div><div class="bk-mark"></div><div class="bk-author">F. Dostoevsky</div></div>
+        </div>
+        <div class="bs-board"></div>
+        <div class="bs-row">
+          <div class="bk" style="--c:#1a1a1a;--c-ink:#e9e3d3;--w:36px;--h:258px;"><div class="bk-band"></div><div class="bk-title">The Hunger Games</div><div class="bk-mark"></div><div class="bk-author">Suzanne Collins</div></div>
+          <div class="bk" style="--c:#c9504a;--c-ink:#fff5dd;--w:30px;--h:232px;"><div class="bk-band"></div><div class="bk-title">Chainsaw Man</div><div class="bk-mark"></div><div class="bk-author">Tatsuki Fujimoto</div></div>
+          <div class="bk" style="--c:#3d8a7a;--c-ink:#e6f3ee;--w:32px;--h:244px;"><div class="bk-band"></div><div class="bk-title">The Psychology of Money</div><div class="bk-mark"></div><div class="bk-author">Morgan Housel</div></div>
+          <div class="bk" style="--c:#c9a04a;--c-ink:#2a1f10;--w:38px;--h:240px;"><div class="bk-band"></div><div class="bk-title">Rich Dad Poor Dad</div><div class="bk-mark"></div><div class="bk-author">Robert Kiyosaki</div></div>
+          <div class="bk" style="--c:#5a3a4f;--c-ink:#ecd8e3;--w:34px;--h:250px;"><div class="bk-band"></div><div class="bk-title">One Arranged Murder</div><div class="bk-mark"></div><div class="bk-author">Chetan Bhagat</div></div>
+          <div class="bk" style="--c:#e8d9b8;--c-ink:#2a201a;--w:40px;--h:262px;"><div class="bk-band"></div><div class="bk-title">Five Point Someone</div><div class="bk-mark"></div><div class="bk-author">Chetan Bhagat</div></div>
+        </div>
+        <div class="bs-board bs-board--floor"></div>
+        <figcaption class="bs-cap"><span class="lc-tick"></span>Personal library &middot; 12 titles &middot; updated <em>Jun ‘26</em></figcaption>
+      </figure>
     </section>
 
     <footer>
